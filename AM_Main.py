@@ -49,10 +49,11 @@ class App(customtkinter.CTk):
         self.textbox.grid(row=0, column=1,padx=10, pady=20, sticky="nw")
         self.textbox.insert("0.0", "Some example text!\n" * 10)
 
-        #
+        #Stats Area
         self.my_frame = MyFrame(master=self, width=710, height=420)
         self.my_frame.grid(row=0, column=1, padx=20, pady=20, sticky="s")
 
+        #Top Level
         self.button_1 = customtkinter.CTkButton(self, text="open toplevel", command=self.open_toplevel)
         self.button_1.grid(row=0, column=1, padx=20, pady=20, sticky="n")
 
