@@ -56,7 +56,6 @@ class App(customtkinter.CTk):
         #Top Level
         self.button_1 = customtkinter.CTkButton(self, text="open toplevel", command=self.open_toplevel)
         self.button_1.grid(row=0, column=1, padx=20, pady=20, sticky="n")
-
         self.toplevel_window = None
 
 
