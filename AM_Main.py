@@ -33,6 +33,7 @@ class MyFrame(customtkinter.CTkFrame):
             topic_selected = topic
             pas= app.topic_pojector
             pas(topic_selected)
+            
 
         #Proof_Event
         def Proof_button_event():
@@ -110,6 +111,7 @@ class MyFrame(customtkinter.CTkFrame):
             button = customtkinter.CTkButton(self, text=Topic_list[i], command=lambda:topic_button_event(self, Topic_list[i]), width=343, height=70, corner_radius=0)
             button.pack(padx=0, pady=0)
             button.place(relx=0.5, rely=y, anchor="s")
+            
             
         #Proof
        #Proofbutton = customtkinter.CTkButton(self, text="Proof", command=Proof_button_event, width=343, height=70, corner_radius=0)
@@ -214,11 +216,6 @@ class App(customtkinter.CTk):
             self.toplevel_window = ToplevelWindow(self)  # create window if its None or destroyed
         else:
             self.toplevel_window.focus()  # if window exists focus it
-
-    
-    def button_callback(self):
-        print("checkbox_frame:", self.checkbox_frame.get())
-        print("radiobutton_frame:", self.radiobutton_frame.get())
 
 
 
