@@ -107,8 +107,7 @@ class MyFrame(customtkinter.CTkFrame):
 
         for i in range (0, len(Topic_list)):
             y = 0.14+0.09*i
-            button_event= topic_button_event(Topic_list[i])
-            button = customtkinter.CTkButton(self, text=Topic_list[i], command=lambda:topic_button_event(Topic_list[i]), width=343, height=70, corner_radius=0)
+            button = customtkinter.CTkButton(self, text=Topic_list[i], command=lambda:topic_button_event(self, Topic_list[i]), width=343, height=70, corner_radius=0)
             button.pack(padx=0, pady=0)
             button.place(relx=0.5, rely=y, anchor="s")
             
