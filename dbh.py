@@ -135,8 +135,45 @@ def get_topic_id_by_subtopic_id(subtopic_id):
         return (False)
     return (result)
 
+def get_topic_name_by_subtopic_id(subtopic_id):
+    #returns the name of the parent topic of a given subtopic
+    topic_name = get_topic_name(get_topic_id_by_subtopic_id(subtopic_id))
+    return (topic_name)
 
-    
+def get_questions(subtopic_id):
+    #Returns all questions for a given subtopic id
+    statement = "SELECT topic_name FROM Subtopics WHERE id=?"
+    data = (subtopic_id,)
+    cur.execute(statement, data)
+    result = cur.fetchone()
+    conn.commit()
+    if not result:
+        print("Error: A subtopic with the id " + str(subtopic_id) + " could not be found.")
+        return
+    statement = "SELECT id FROM Questions WHERE subtopic_id=?"
+    data = (subtopic_id,)
+    cur.execute(statement, data)
+    result = cur.fetchall()
+    conn.commit()
+    questions = []
+    for row in result:
+        questions.append(row[0])
+    return (questions)
+
+def get_question_paths(question_id):
+    #returns the image paths for a given question
+    statement = "SELECT path FROM QuestionImages WHERE question_id=?"
+    data = (question_id,)
+    cur.execute(statement, data)
+    result = cur.fetchall()
+    conn.commit()
+    if not result:
+        print("Error: No question with the id " + str(question_id) + " could not be found.")
+        return
+    paths = []
+    for row in result:
+        paths.append(row[0])
+    return (paths)
 
 
 
