@@ -101,8 +101,8 @@ def register_topic():
         return
     conn.commit()
     #Add topic
-    statement = "INSERT INTO Topics (topic_name, score, max_score) VALUES (?, ?, ?)"
-    data = (topic_name, 0, 0)
+    statement = "INSERT INTO Topics (topic_name) VALUES (?)"
+    data = (topic_name,)
     cur.execute()
     conn.commit()
 
@@ -135,8 +135,8 @@ def register_subtopic():
     conn.commit()
 
     #Add the subtopic
-    statement = "INSERT INTO Subtopics (topic_name, score, max_score, topic_id) VALUES (?, ?, ?, ?)"
-    data = (subtopic_name, 0, 0, topic_id)
+    statement = "INSERT INTO Subtopics (topic_name, topic_id) VALUES (?, ?)"
+    data = (subtopic_name, topic_id)
     cur.execute(statement, data)
     conn.commit()
     
