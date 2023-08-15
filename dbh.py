@@ -123,6 +123,18 @@ def get_subtopic_ids(topic_id):
         subtopics.append(row[0])
     return(subtopics)
 
+def get_topic_id_by_subtopic_id(subtopic_id):
+    #returns the topic id for a given subtopic id
+    statement = "SELECT topic_id FROM Subtopics WHERE id=?"
+    data = (subtopic_id,)
+    cur.execute(statement, data)
+    result = cur.fetchone()
+    conn.commit()
+    if not result:
+        print ("Error: No subtopic with that ID exists")
+        return (False)
+    return (result)
+
 
     
 
