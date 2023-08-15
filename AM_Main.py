@@ -117,8 +117,7 @@ class App(customtkinter.CTk):
         Topic_list_dict = d.get_subtopics(topic_selected_id)
         print(Topic_list_dict)
         print(type(Topic_list_dict))
-        Topic_list = [tup[1] for tup in Topic_list_dict]
-        print(Topic_list)
+        Topic_list = list(Topic_list_dict.values())
             
             
         self.my_frame = sub_topics_frame(master=self, width=220, height=1275,fg_color="transparent", Topic_list=Topic_list)
