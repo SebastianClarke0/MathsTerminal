@@ -98,6 +98,32 @@ def get_subtopics(topic_id):
     for row in result:
         subtopics.update({row[0]:row[1]})
     return(subtopics)
+
+def get_subtopic_names(topic_id):
+    #returns a list of subtopic names
+    statement = "SELECT topic_name FROM Subtopics WHERE topic_id=?"
+    data = (topic_id,)
+    cur.execute(statement, data)
+    result = cur.fetchall()
+    conn.commit()
+    subtopics = []
+    for row in result:
+        subtopics.append(row[0])
+    return(subtopics)
+
+def get_subtopic_ids(topic_id):
+    #returns a list of subtopic ids
+    statement = "SELECT id FROM Subtopics WHERE topic_id=?"
+    data = (topic_id,)
+    cur.execute(statement, data)
+    result = cur.fetchall()
+    conn.commit()
+    subtopics = []
+    for row in result:
+        subtopics.append(row[0])
+    return(subtopics)
+
+
     
 
 
