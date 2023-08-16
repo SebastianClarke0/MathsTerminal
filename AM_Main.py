@@ -77,7 +77,10 @@ class ToplevelWindow(customtkinter.CTkToplevel):
         super().__init__(master, **kwargs)
         self.topic_selected = topic_selected
         print(topic_selected)
+<<<<<<< Updated upstream
         d.
+=======
+>>>>>>> Stashed changes
         self.geometry("1275x870")
         self.my_frame = top_level_parent_frame(master=self, width=1255, height=800, fg_color="transparent")
         self.my_frame.grid(row=0, column=0, padx=0, pady=0, sticky="n")
