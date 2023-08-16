@@ -6,6 +6,11 @@ cur = conn.cursor()
 
 def get_topic_name(topic_id):
     #Gets topic name by id
+    try:
+        topic_id = int(topic_id)
+    except:
+        print("Error: Input must be of type Integer")
+        return False
     statement = "SELECT topic_name FROM Topics WHERE id=?"
     data = (topic_id,)
     cur.execute(statement, data)
@@ -18,6 +23,7 @@ def get_topic_name(topic_id):
 
 def get_topic_id(topic_name):
     #Gets topic id by name
+    topic_name = str(topic_name)
     statement = "SELECT id FROM Topics WHERE topic_name=?"
     data = (topic_name,)
     cur.execute(statement, data)
@@ -73,6 +79,11 @@ def get_topic_ids():
 
 def check_topic(topic_id):
     #Returns a bool if found
+    try:
+        topic_id = int(topic_id)
+    except:
+        print ("Error: Input must be of type Integer")
+        return False
     statement = "SELECT id FROM Topics WHERE id=?"
     data = (topic_id,)
     cur.execute(statement, data)
@@ -85,6 +96,11 @@ def check_topic(topic_id):
 
 def get_subtopic_name(subtopic_id):
     #Gets subtopic name by id
+    try:
+        subtopic_id = int(subtopic_id)
+    except:
+        print ("Error: Input must be of type Integer")
+        return False
     statement = "SELECT topic_name FROM Subtopics WHERE id=?"
     data = (subtopic_id,)
     cur.execute(statement, data)
@@ -97,6 +113,12 @@ def get_subtopic_name(subtopic_id):
 
 def get_subtopic_id(subtopic_name, topic_id):
     #Gets subtopic id by name and topic id
+    try:
+        topic_id = int(topic_id)
+    except:
+        print("Error: Topic id must be of type Integer")
+        return False
+    subtopic_name = str(subtopic_name)
     statement = "SELECT topic_name FROM Subtopics WHERE topic_name=? AND topic_id=?"
     data = (subtopic_name, topic_id)
     cur.execute(statement, data)
@@ -109,6 +131,11 @@ def get_subtopic_id(subtopic_name, topic_id):
 
 def get_subtopics(topic_id):
     #Returns a dictionary of subtopic and their id based on the topic id
+    try:
+        topic_id = int(topic_id)
+    except:
+        print("Error: Input must be of type Integer")
+        return False
     statement = "SELECT id,topic_name FROM Subtopics WHERE topic_id=?"
     data = (topic_id,)
     cur.execute(statement, data)
@@ -121,6 +148,11 @@ def get_subtopics(topic_id):
 
 def get_subtopic_names(topic_id):
     #returns a list of subtopic names
+    try:
+        topic_id = int(topic_id)
+    except:
+        print("Error: Input must be of type Integer")
+        return False
     statement = "SELECT topic_name FROM Subtopics WHERE topic_id=?"
     data = (topic_id,)
     cur.execute(statement, data)
@@ -133,6 +165,11 @@ def get_subtopic_names(topic_id):
 
 def get_subtopic_ids(topic_id):
     #returns a list of subtopic ids
+    try:
+        topic_id = int(topic_id)
+    except:
+        print("Error: Input must be of type Integer")
+        return False
     statement = "SELECT id FROM Subtopics WHERE topic_id=?"
     data = (topic_id,)
     cur.execute(statement, data)
@@ -145,6 +182,11 @@ def get_subtopic_ids(topic_id):
 
 def check_subtopic(subtopic_id):
     #Returns a bool indicating if a subtopic exists
+    try:
+        subtopic_id = int(subtopic_id)
+    except:
+        print("Error: Input must be of type Integer")
+        return False
     statement = "SELECT id FROM Subtopics WHERE id=?"
     data = (subtopic_id,)
     cur.execute(statement, data)
@@ -163,6 +205,11 @@ def print_subtopics(subtopics):
 
 def get_topic_id_by_subtopic_id(subtopic_id):
     #returns the topic id for a given subtopic id
+    try:
+        subtopic_id = int(subtopic_id)
+    except:
+        print("Error: Input must be of type Integer")
+        return False
     statement = "SELECT topic_id FROM Subtopics WHERE id=?"
     data = (subtopic_id,)
     cur.execute(statement, data)
@@ -175,11 +222,21 @@ def get_topic_id_by_subtopic_id(subtopic_id):
 
 def get_topic_name_by_subtopic_id(subtopic_id):
     #returns the name of the parent topic of a given subtopic
+    try:
+        subtopic_id = int(subtopic_id)
+    except:
+        print("Error: Input must be of type Integer")
+        return False
     topic_name = get_topic_name(get_topic_id_by_subtopic_id(subtopic_id))
     return (topic_name)
 
 def get_questions(subtopic_id):
     #Returns all questions for a given subtopic id
+    try:
+        subtopic_id = int(subtopic_id)
+    except:
+        print("Error: Input must be of type Integer")
+        return False
     statement = "SELECT topic_name FROM Subtopics WHERE id=?"
     data = (subtopic_id,)
     cur.execute(statement, data)
@@ -200,6 +257,11 @@ def get_questions(subtopic_id):
 
 def get_question_paths(question_id):
     #returns the image paths for a given question
+    try:
+        question_id = int(question_id)
+    except:
+        print("Error: Input must be of type Integer")
+        return False
     statement = "SELECT path FROM QuestionImages WHERE question_id=?"
     data = (question_id,)
     cur.execute(statement, data)
@@ -215,6 +277,11 @@ def get_question_paths(question_id):
 
 def get_questions_random(subtopic_id):
     #Returns up to 10 random questions
+    try:
+        subtopic_id = int(subtopic_id)
+    except:
+        print("Error: Input must be of type Integer")
+        return False
     #First count how many questions exist
     statement = "SELECT COUNT(*) FROM Questions WHERE subtopic_id=?"
     data = (subtopic_id,)
