@@ -1,4 +1,5 @@
 import sqlite3
+import time
 
 conn = sqlite3.connect("./database/Maths_Topics.db")
 cur = conn.cursor()
@@ -175,7 +176,59 @@ def get_question_paths(question_id):
         paths.append(row[0])
     return (paths)
 
+def get_questions_random(subtopic_id):
+    #Returns up to 10 random questions
+    #First count how many questions exist
+    statement = "SELECT COUNT(*) FROM Questions WHERE subtopic_id=?"
+    data = (subtopic_id,)
+    cur.execute(statement, data)
+    result = cur.fetchone()
+    conn.commit()
+    limit = 10 if result > 10 else result
 
+    #Get random questions
+    statement = "SELECT id FROM Questions WHERE subtopic_id=? ORDER BY RANDOM() LIMIT ?"
+    data = (subtopic_id, limit)
+    cur.execute(statement, data)
+    result = cur.fetchall()
+    conn.commit()
+
+    #Generate an array of ids
+    ids = []
+    for row in result:
+        ids.append(row[0])
+
+    #Itterate through
+    questions = {}
+    statement1 = "SELECT max_score FROM Questions WHERE id=?"
+    statement2 = "SELECT path FROM QuestionImages WHERE question_id=?"
+    for i in range(0, len(ids)):
+        data = (ids[i],)
+        cur.execute(statement1, data)
+        max_score = cur.fetchone()
+        conn.commit()
+
+        cur.execute(statement2, data)
+        result = cur.fetchall()
+        conn.commit()
+        paths = []
+        for row in result:
+            paths.append(row[0])
+
+        #Add to dictionary
+        questions.update(ids[i]:{"max_score":max_score, "paths":paths})
+    return (questions)
+
+def add_score(score, subtopic_id):
+    #Adds a score to the scores table
+    topic_id = get_topic_id_by_subtopic_id(subtopic_id)
+    time = int(time.time())
+    statement = "INSERT INTO Scores (subtopic_id,topic_id,score,date) VALUES (?,?,?,?)"
+    data = (subtopic_id, topic_id, score, time)
+    cur.execute(statement, data)
+    conn.commit()
+
+#add score
 
 
 
