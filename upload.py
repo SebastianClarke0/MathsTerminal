@@ -140,8 +140,28 @@ def register_subtopic():
 def register_question():
     #Get topics
     d.print_topics(d.get_topics())
-    
 
+    is_topic = False
+    selected_topic = 0
+    while not is_topic:
+        print ("\n")
+        selected_topic = int(input("Enter topic id: "))
+        is_topic = d.check_topic(selected_topic))
+        if not is_topic:
+            print ("Error: Please enter a valid topic id.")
+
+    #Get subtopics
+    is_subtopic = False
+    selected_subtopic = 0
+    while not is_subtopic:
+        print ("\n")
+        selected_subtopic = int(input("Enter subtopic id: "))
+        is_subtopic = d.check_subtopic(selected_subtopic)
+        if not is_subtopic:
+            print ("Error: Please enter a valid subtopic id.")
+
+    
+    
     #Find what this questions ID would be
 
     statement = "SELECT MAX(id) FROM Questions"

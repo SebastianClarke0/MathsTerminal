@@ -44,7 +44,8 @@ def print_topics(topics):
     #Prints all topics
     print ("\n----------TOPICS----------\n")
     for key, value in topics.items():
-        print(key + " -> " + value + "\n")
+        print(str(key) + " -> " + str(value) + "\n")
+    print ("--------------------------\n")
 
 def get_topic_names():
     #Returns a list of all topic names
@@ -141,6 +142,24 @@ def get_subtopic_ids(topic_id):
     for row in result:
         subtopics.append(row[0])
     return(subtopics)
+
+def check_subtopic(subtopic_id):
+    #Returns a bool indicating if a subtopic exists
+    statement = "SELECT id FROM Subtopics WHERE id=?"
+    data = (subtopic_id)
+    cur.execute(statement, data)
+    result = cur.fetchone()
+    conn.commit()
+    if not result:
+        return (False)
+    else:
+        return (True)
+
+def print_subtopics(subtopics):
+    print ("\n----------SUBTOPICS----------\n")
+    for key, value in subtopics:
+        print (str(key) + " : " + str(value) + "\n")
+    print ("\n-----------------------------\n")
 
 def get_topic_id_by_subtopic_id(subtopic_id):
     #returns the topic id for a given subtopic id
