@@ -1,3 +1,13 @@
+#This file contains useful functions for accessing the database
+
+#get_topic_name() -> Returns topic name from ID
+#get_topic_id()   -> Returns a topic id from Name
+#get_topics()     -> Returns a dictionary of all topics
+#print_topics()   -> Lists all topics in console
+#get_topic_names()-> Returns a list of topic names
+#get_topic_ids()  -> Returns a list of all topic ids
+#check_topic()    -> Returns a bool indicating whether a topic exists
+
 import sqlite3
 import time
 
