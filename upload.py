@@ -146,11 +146,13 @@ def register_question():
     while not is_topic:
         print ("\n")
         selected_topic = int(input("Enter topic id: "))
-        is_topic = d.check_topic(selected_topic))
+        is_topic = d.check_topic(selected_topic)
         if not is_topic:
             print ("Error: Please enter a valid topic id.")
 
     #Get subtopics
+    d.print_subtopics(d.get_subtopics(selected_topic))
+    
     is_subtopic = False
     selected_subtopic = 0
     while not is_subtopic:
@@ -160,43 +162,50 @@ def register_question():
         if not is_subtopic:
             print ("Error: Please enter a valid subtopic id.")
 
+    enter_another = True
+    while enter_another:
+        print ("\n")
+        #First, register the question
+        max_score = int(input("Enter the max score for this question: "))
+        statement = "INSERT INTO Questions (topic_id, subtopic_id, max_score) VALUES (?,?,?)"
+        data = (selected_topic, selected_subtopic, max_score)
+        cur.execute(statement, data)
+        question_id = int(cur.lastrowid)
+        conn.commit()
+
+        add_images = True
+        while add_images:
+            #Get fileid
+            statement = "SELECT MAX(id) FROM QuestionImages"
+            data = ()
+            cur.execute(statement, data)
+            last_id = (cur.fetchone())[0]
+            conn.commit()
+            if last_id is None:
+                last_id = 0
+            new_id = int(last_id) + 1
+
+            #Get the image
+            if (not os.path.isdir("./resources")):
+                os.mkdir("./resources")
+            if (not os.path.isdir("./resources/questions")):
+                os.mkdir("./resources/questions")
+            new_path = "./resources/questions/" + str(new_id) + ".png"
+            Tk().withdraw()
+            filename = askopenfilename()
+            shutil.copyfile(filename, new_path)
+
+            #Register in table
+            statement = "INSERT INTO QuestionImages (question_id,path) VALUES (?,?)"
+            data = (question_id, new_path)
+            cur.execute(statement, data)
+            conn.commit()
+
+            should_rego = input("Would you like to add another image? y/n: ")
+            add_images = should_rego == "y"
+        should_add = input("Would you like to add another question? y/n: ")
+        enter_another = should_add == "y"
     
-    
-    #Find what this questions ID would be
-
-    statement = "SELECT MAX(id) FROM Questions"
-    data = ()
-    cur.execute(statement, data)
-    result = cur.fetchone()
-    conn.commit();
-    if not result[0] is None:
-        this_id = result[0] + 1
-    else:
-        this_id = 1
-
-    #Get the image, rename it, and move it to correct location
-    if (not os.path.isdir("./resources")):
-        os.mkdir("./resources")
-    if (not os.path.isdir("./resources/questions")):
-        os.mkdir("./resources/questions")
-    #Now we have the directory, get the image
-    new_path = "./resources/questions/" + str(this_id) + ".png"
-    shutil.copyfile(image_path, new_path)
-    
-    #Insert into table
-    statement = "INSERT INTO Questions (title, image_path, topic_id, subtopic_id) VALUES (?, ?, ?, ?)"
-    data = (question_title, new_path, topic_id, subtopic_id)
-    cur.execute(statement, data)
-    conn.commit()
-
-    all_entered = False
-    while (not all_entered):
-        choice = input("1 -> Add an answer\n2 -> continue\n-$ ")
-        if (choice == "2"):
-            all_entered = True
-        elif (choice == "1"):
-            add_answer(this_id)
-
 while (True):
     choice = input("1 -> Register topic\n2 -> Register Subtopic\n3 -> Register Question\n4 -> Add Answer(s)\n5 -> Exit\n-$ ")
     match choice:

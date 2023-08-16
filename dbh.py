@@ -116,7 +116,7 @@ def get_subtopics(topic_id):
     conn.commit()
     subtopics = {}
     for row in result:
-        subtopics.update({row[0]:row[1]})
+        subtopics.update({int(row[0]):str(row[1])})
     return(subtopics)
 
 def get_subtopic_names(topic_id):
@@ -146,7 +146,7 @@ def get_subtopic_ids(topic_id):
 def check_subtopic(subtopic_id):
     #Returns a bool indicating if a subtopic exists
     statement = "SELECT id FROM Subtopics WHERE id=?"
-    data = (subtopic_id)
+    data = (subtopic_id,)
     cur.execute(statement, data)
     result = cur.fetchone()
     conn.commit()
@@ -157,7 +157,7 @@ def check_subtopic(subtopic_id):
 
 def print_subtopics(subtopics):
     print ("\n----------SUBTOPICS----------\n")
-    for key, value in subtopics:
+    for key, value in subtopics.items():
         print (str(key) + " : " + str(value) + "\n")
     print ("\n-----------------------------\n")
 
