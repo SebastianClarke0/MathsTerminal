@@ -1,4 +1,5 @@
 import sqlite3
+import time
 
 conn = sqlite3.connect("./database/Maths_Topics.db")
 cur = conn.cursor()
@@ -39,6 +40,13 @@ def get_topics():
         topics_dict.update({row[0]:row[1]})
     return(topics_dict)
 
+def print_topics(topics):
+    #Prints all topics
+    print ("\n----------TOPICS----------\n")
+    for key, value in topics.items():
+        print(str(key) + " -> " + str(value) + "\n")
+    print ("--------------------------\n")
+
 def get_topic_names():
     #Returns a list of all topic names
     statement = "SELECT topic_name FROM Topics ORDER BY topic_name ASC"
@@ -62,6 +70,18 @@ def get_topic_ids():
     for row in result:
         topic_array.append(row[0])
     return(topic_array)
+
+def check_topic(topic_id):
+    #Returns a bool if found
+    statement = "SELECT id FROM Topics WHERE id=?"
+    data = (topic_id,)
+    cur.execute(statement, data)
+    result = cur.fetchone()
+    conn.commit()
+    if not result:
+        return False
+    else:
+        return True
 
 def get_subtopic_name(subtopic_id):
     #Gets subtopic name by id
@@ -123,6 +143,24 @@ def get_subtopic_ids(topic_id):
         subtopics.append(row[0])
     return(subtopics)
 
+def check_subtopic(subtopic_id):
+    #Returns a bool indicating if a subtopic exists
+    statement = "SELECT id FROM Subtopics WHERE id=?"
+    data = (subtopic_id)
+    cur.execute(statement, data)
+    result = cur.fetchone()
+    conn.commit()
+    if not result:
+        return (False)
+    else:
+        return (True)
+
+def print_subtopics(subtopics):
+    print ("\n----------SUBTOPICS----------\n")
+    for key, value in subtopics:
+        print (str(key) + " : " + str(value) + "\n")
+    print ("\n-----------------------------\n")
+
 def get_topic_id_by_subtopic_id(subtopic_id):
     #returns the topic id for a given subtopic id
     statement = "SELECT topic_id FROM Subtopics WHERE id=?"
@@ -175,7 +213,59 @@ def get_question_paths(question_id):
         paths.append(row[0])
     return (paths)
 
+def get_questions_random(subtopic_id):
+    #Returns up to 10 random questions
+    #First count how many questions exist
+    statement = "SELECT COUNT(*) FROM Questions WHERE subtopic_id=?"
+    data = (subtopic_id,)
+    cur.execute(statement, data)
+    result = cur.fetchone()
+    conn.commit()
+    limit = 10 if result > 10 else result
 
+    #Get random questions
+    statement = "SELECT id FROM Questions WHERE subtopic_id=? ORDER BY RANDOM() LIMIT ?"
+    data = (subtopic_id, limit)
+    cur.execute(statement, data)
+    result = cur.fetchall()
+    conn.commit()
+
+    #Generate an array of ids
+    ids = []
+    for row in result:
+        ids.append(row[0])
+
+    #Itterate through
+    questions = {}
+    statement1 = "SELECT max_score FROM Questions WHERE id=?"
+    statement2 = "SELECT path FROM QuestionImages WHERE question_id=?"
+    for i in range(0, len(ids)):
+        data = (ids[i],)
+        cur.execute(statement1, data)
+        max_score = cur.fetchone()
+        conn.commit()
+
+        cur.execute(statement2, data)
+        result = cur.fetchall()
+        conn.commit()
+        paths = []
+        for row in result:
+            paths.append(row[0])
+
+        #Add to dictionary
+        temp_dict = {"max_score":max_score, "paths":paths}
+        temp_dict2 = {ids[i]:temp_dict}
+        questions.update(temp_dict2)
+    return (questions)
+
+def add_score(score, subtopic_id):
+    #Adds a score to the scores table
+    topic_id = get_topic_id_by_subtopic_id(subtopic_id)
+    time = int(time.time())
+    statement = "INSERT INTO Scores (subtopic_id,topic_id,score,date) VALUES (?,?,?,?)"
+    data = (subtopic_id, topic_id, score, time)
+    cur.execute(statement, data)
+    conn.commit()
 
 
 
