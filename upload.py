@@ -225,6 +225,7 @@ def register_question():
             if (not os.path.isdir("./resources/answers")):
                 os.mkdir("./resources/answers")
             new_path = "./resources/questions/" + str(new_id) + ".png"
+            print ("\nPlease select an answer image.")
             Tk().withdraw()
             filename = askopenfilename()
             shutil.copyfile(filename, new_path)
