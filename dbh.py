@@ -228,8 +228,6 @@ def add_score(score, subtopic_id):
     cur.execute(statement, data)
     conn.commit()
 
-#add score
-
 
 
 
