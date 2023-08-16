@@ -183,6 +183,8 @@ def register_question():
             conn.commit()
             if last_id is None:
                 last_id = 0
+            else:
+                last_id = int(last_id[0])
             new_id = int(last_id) + 1
 
             #Get the image
