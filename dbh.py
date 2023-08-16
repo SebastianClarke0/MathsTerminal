@@ -40,6 +40,12 @@ def get_topics():
         topics_dict.update({row[0]:row[1]})
     return(topics_dict)
 
+def print_topics(topics):
+    #Prints all topics
+    print ("\n----------TOPICS----------\n")
+    for key, value in topics.items():
+        print(key + " -> " + value + "\n")
+
 def get_topic_names():
     #Returns a list of all topic names
     statement = "SELECT topic_name FROM Topics ORDER BY topic_name ASC"
@@ -63,6 +69,18 @@ def get_topic_ids():
     for row in result:
         topic_array.append(row[0])
     return(topic_array)
+
+def check_topic(topic_id):
+    #Returns a bool if found
+    statement = "SELECT id FROM Topics WHERE id=?"
+    data = (topic_id,)
+    cur.execute(statement, data)
+    result = cur.fetchone()
+    conn.commit()
+    if not result:
+        return False
+    else:
+        return True
 
 def get_subtopic_name(subtopic_id):
     #Gets subtopic name by id
@@ -216,7 +234,9 @@ def get_questions_random(subtopic_id):
             paths.append(row[0])
 
         #Add to dictionary
-        questions.update(ids[i]:{"max_score":max_score, "paths":paths})
+        temp_dict = {"max_score":max_score, "paths":paths}
+        temp_dict2 = {ids[i]:temp_dict}
+        questions.update(temp_dict2)
     return (questions)
 
 def add_score(score, subtopic_id):

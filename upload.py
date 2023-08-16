@@ -11,6 +11,7 @@ ttk.Label(frame, text="Test").grid(column = 0, row = 0)
 ttk.Button(frame, text="Quit", command=root.destroy).grid(column = 1, row = 0)
 root.mainloop()"""
 
+import dbh as d
 from dbh import conn, cur
 
 def get_topics():
@@ -111,14 +112,9 @@ def register_subtopic():
     print_topics(get_topics())
     topic_id = input("Enter the parent topic: ")
     #Check that the given topic exists
-    statement = "SELECT id FROM Topics WHERE id=?"
-    data = (int(topic_id),)
-    cur.execute(statement, data)
-    result = cur.fetchone()
-    if not result:
-        print("Topic not found")
+    if not d.check_topic(int(topic_id)):
+        print ("Error: Topic not found")
         return
-    conn.commit()
     
     #Get current sub topics
     print_subtopics(get_subtopics(topic_id))
@@ -143,59 +139,8 @@ def register_subtopic():
 
 def register_question():
     #Get topics
-    print_topics(get_topics())
-
-    #Get topic input
-    is_numeric = False
-    topic_id = 0
-    while (not is_numeric):
-        topic_id = input("Enter the topic id: ")
-        if (topic_id.isnumeric()):
-            is_numeric = True
-            topic_id = int(topic_id)
-        else:
-            print ("Please enter a valid id")
-    #Check that the ID exists
-    statement = "SELECT id FROM Topics WHERE id=?"
-    data = (topic_id,)
-    cur.execute(statement, data)
-    result = cur.fetchone()
-    if not result:
-        print ("Please enter a valid topic ID")
-        conn.commit()
-        return;
-    conn.commit()
-
-    #Get subtopics
-    print_subtopics(get_subtopics(topic_id))
-
-    #Get sub topic input
-    numeric = False
-    subtopic_id = 0
-    while (not numeric):
-        subtopic_id = input("Enter the subtopic id: ")
-        if (subtopic_id.isnumeric):
-            subtopic_id = int(subtopic_id)
-            numeric = True
-        else:
-            print("Please enter a valid id")
-    #Check the id exists
-    statement = "SELECT id FROM subtopics WHERE id=?"
-    data = (subtopic_id,)
-    cur.execute(statement, data)
-    result = cur.fetchone()
-    if not result:
-        print("Please enter a valid ID")
-    conn.commit()
-
-    #Get the questions
-    print ("\nExisting questions for that topic: ")
-    print_questions(get_questions(topic_id, subtopic_id))
-
-    #Get inputs
-    question_title = input("New question title: ")
-    Tk().withdraw()
-    image_path = askopenfilename()
+    d.print_topics(d.get_topics())
+    
 
     #Find what this questions ID would be
 
@@ -231,71 +176,6 @@ def register_question():
             all_entered = True
         elif (choice == "1"):
             add_answer(this_id)
-
-def edit_question():
-    print_topics(get_topics())
-    topic_correct = False
-    while (not topic_correct):
-        topic_id = input("Enter the topic id: ")
-        if (topic_id.isnumeric()):
-            topic_id = int(topic_id)
-            #Check that the topic exists
-            statement = "SELECT id FROM Topics WHERE id=?"
-            data = (topic_id,)
-            cur.execute(statement, data)
-            result = cur.fetchone()
-            if not result:
-                print ("Please enter a valid id")
-                continue
-            conn.commit()
-            topic_correct = True
-        else:
-            print("Please enter a valid id")
-    #We now have a valid topic id, check subtopics
-
-    print_subtopics(get_subtopics())
-    subtopic_correct = False;
-    while (not subtopic_correct):
-        subtopic_id = input("Enter the subtopic id: ")
-        if (not subtopic_id.isnumeric()):
-            print("Please enter a valid id")
-            continue
-        #Check that the subtopic is in the database
-        subtopic_id = int(subtopic_id)
-        statement = "SELECT id FROM Subtopics WHERE id=?"
-        data = (subtopic_id,)
-        cur.execute(statement, data)
-        result = cur.fetchone()
-        if not result:
-            print("Please enter a valid ID")
-            continue
-        conn.commit()
-        subtopic_correct = True
-
-    #We now have a correct subtopic id, get the question ID
-
-    print_questions(get_questions())
-
-    question_correct = False
-    while (not question_correct):
-        question_id = input("Enter question ID: ")
-        if (not question_id.isnumeric()):
-            print("Please enter a valid ID")
-            continue
-        subtopic_id = int(subtopic_id)
-        statement = "SELECT id FROM Questions WHERE id=?"
-        data = (subtopic_id,)
-        cur.execute(statement, data)
-        result = cur.fetchone()
-        if not result:
-            print("Question not found!")
-            continue
-        conn.commit()
-        question_correct = True
-
-    valid_choice = False
-    while (not valid_choice):
-        choice = input("1 -> Edit Title\n2 -> 
 
 while (True):
     choice = input("1 -> Register topic\n2 -> Register Subtopic\n3 -> Register Question\n4 -> Add Answer(s)\n5 -> Exit\n-$ ")
