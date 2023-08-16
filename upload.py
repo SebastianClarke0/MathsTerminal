@@ -203,6 +203,41 @@ def register_question():
 
             should_rego = input("Would you like to add another image? y/n: ")
             add_images = should_rego == "y"
+
+        #Now add answers
+        add_more_answers = True
+        while add_more_answers:
+            print ("\n")
+
+            #Get last insert id
+            statement = "INSERT INTO AnswerImages (question_id) VALUES (?)"
+            data = (question_id,)
+            cur.execute(statement, data)
+            last_id = cur.fetchone()
+            conn.commit()
+            if last_id is None:
+                last_id = 0
+            else:
+                last_id = int(last_id[0])
+            new_id = int(last_id) + 1
+
+            #Get the image
+            if (not os.path.isdir("./resources/answers")):
+                os.mkdir("./resources/answers")
+            new_path = "./resources/questions/" + str(new_id) + ".png"
+            Tk().withdraw()
+            filename = askopenfilename()
+            shutil.copyfile(filename, new_path)
+
+            #Register in table
+            statement = "UPDATE AnswerImages SET path=? WHERE id=?"
+            data = (new_path, new_id)
+            cur.execute(statement, data)
+            conn.commit()
+
+            should_rego = input("Would you like to add another answer image? y/n: ")
+            add_more_answers = should_rego == "y"
+        
         should_add = input("Would you like to add another question? y/n: ")
         enter_another = should_add == "y"
     
