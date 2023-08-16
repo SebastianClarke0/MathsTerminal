@@ -44,6 +44,7 @@ class top_level_parent_frame(customtkinter.CTkScrollableFrame):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
         
+        
             
 class topics_frame(customtkinter.CTkFrame):
     def __init__(self, master, **kwargs):
@@ -72,8 +73,14 @@ class topics_frame(customtkinter.CTkFrame):
         
 
 class ToplevelWindow(customtkinter.CTkToplevel):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self,master,topic_selected, **kwargs):
+        super().__init__(master, **kwargs)
+        self.topic_selected = topic_selected
+        print(topic_selected)
+<<<<<<< Updated upstream
+        d.
+=======
+>>>>>>> Stashed changes
         self.geometry("1275x870")
         self.my_frame = top_level_parent_frame(master=self, width=1255, height=800, fg_color="transparent")
         self.my_frame.grid(row=0, column=0, padx=0, pady=0, sticky="n")
@@ -106,7 +113,9 @@ class App(customtkinter.CTk):
         self.label2 = customtkinter.CTkLabel(self, text=(topic_selected), width=500, height=60,font=title_font)
         self.label2.place(relx=0.3,rely=0)
         print(topic_selected)
-        self.button_1 = customtkinter.CTkButton(self, text="Start Review", command=self.open_toplevel, width=40, height=330)
+        def make_command2(topic_selected):
+            return lambda:  app.open_toplevel(topic_selected)
+        self.button_1 = customtkinter.CTkButton(self, text="Start Review", command=make_command2(topic_selected), width=40, height=330)
         self.button_1.grid(row=0, column=1, padx=20, pady=20, sticky="ne")
         self.toplevel_window = None
 
@@ -124,9 +133,10 @@ class App(customtkinter.CTk):
         self.my_frame.grid(row=0, column=2, padx=0, pady=0, sticky="s")
         
     
-    def open_toplevel(self):
+    def open_toplevel(self, topic_selected):
+        self.topic_selected = topic_selected
         if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
-            self.toplevel_window = ToplevelWindow(self)  # create window if its None or destroyed
+            self.toplevel_window = ToplevelWindow(self, topic_selected=topic_selected)  # create window if its None or destroyed
         #else:
          #   self.toplevel_window.focus()  # if window exists focus it
 
