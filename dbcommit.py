@@ -20,10 +20,10 @@ conn.close()
 
 
 
-'''
+
 conn.execute(""" CREATE TABLE IF NOT EXISTS Topics(topic_name TEXT, topic_score INTEGER,  topic_max_score INTEGER)""")
 #statement = "INSERT INTO Topics (topic_name, topic_score) VALUES (?, ?)";
-
+'''
 DATALISTX = [
 ("Direct Proof, by Exhaustion, Counter Example, Joting", 0,
 ,("Proof by Contradiction", 0)
@@ -118,3 +118,4 @@ conn.commit();
 
 cur.close()
 conn.close()
+
