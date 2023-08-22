@@ -184,7 +184,7 @@ def register_question():
             if last_id is None:
                 last_id = 0
             else:
-                last_id = int(last_id[0])
+                last_id = int(last_id)
             new_id = int(last_id) + 1
 
             #Get the image
@@ -212,8 +212,8 @@ def register_question():
             print ("\n")
 
             #Get last insert id
-            statement = "INSERT INTO AnswerImages (question_id) VALUES (?)"
-            data = (question_id,)
+            statement = "SELECT MAX(id) FROM AnswerImages"
+            data = ()
             cur.execute(statement, data)
             last_id = cur.fetchone()
             conn.commit()
@@ -226,15 +226,15 @@ def register_question():
             #Get the image
             if (not os.path.isdir("./resources/answers")):
                 os.mkdir("./resources/answers")
-            new_path = "./resources/questions/" + str(new_id) + ".png"
+            new_path = "./resources/answers/" + str(new_id) + ".png"
             print ("\nPlease select an answer image.")
             Tk().withdraw()
             filename = askopenfilename()
             shutil.copyfile(filename, new_path)
 
             #Register in table
-            statement = "UPDATE AnswerImages SET path=? WHERE id=?"
-            data = (new_path, new_id)
+            statement = "INSERT INTO AnswerImages (path, question_id) VALUES (?, ?)"
+            data = (new_path, question_id)
             cur.execute(statement, data)
             conn.commit()
 
